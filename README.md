@@ -28,11 +28,11 @@ python server.py             # http://localhost:5000, SQLite ./dev.db
 cd ~ && unzip -o tapak-store.zip && cd tapak-store
 cp .env.example .env && nano .env        # isi DATABASE_URL dan SECRET_KEY
 sudo docker build -t tapak-store .
-sudo docker rm -f toko 2>/dev/null
+sudo docker rm -f tapak 2>/dev/null
 sudo docker run -d --name tapak --restart unless-stopped -p 5000:5000 --env-file .env -v /var/log/toko:/srv/logs tapak-store
-sudo docker logs toko
+sudo docker logs tapak
 ```
-Ubah `VULN_*` di `.env`, lalu `docker rm -f toko` dan `docker run` lagi (tanpa build ulang).
+Ubah `VULN_*` di `.env`, lalu `docker rm -f tapak` dan `docker run` lagi (tanpa build ulang).
 
 ## Log (dibaca Wazuh Agent): /var/log/toko/app.log
 Format `ISO-UTC LEVEL event=NAMA kunci=nilai`. Event: LOGIN_OK, LOGIN_FAILED, REGISTER_OK/FAILED,
