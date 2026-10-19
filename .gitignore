@@ -1,0 +1,22 @@
+# Rahasia dan konfigurasi lokal. JANGAN di-commit.
+.env
+*.env
+!.env.example
+
+# Log, database lokal, cache
+logs/
+*.log
+dev.db
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Arsip dan berkas OS/editor
+*.zip
+*.tar.gz
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
