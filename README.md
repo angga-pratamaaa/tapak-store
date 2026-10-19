@@ -25,11 +25,11 @@ python server.py             # http://localhost:5000, SQLite ./dev.db
 
 ## Deploy di srv-web
 ```
-cd ~ && unzip -o sepatu-flask.zip && cd toko-flask
+cd ~ && unzip -o tapak-store.zip && cd tapak-store
 cp .env.example .env && nano .env        # isi DATABASE_URL dan SECRET_KEY
-sudo docker build -t toko-flask .
+sudo docker build -t tapak-store .
 sudo docker rm -f toko 2>/dev/null
-sudo docker run -d --name toko --restart unless-stopped -p 5000:5000 --env-file .env -v /var/log/toko:/srv/logs toko-flask
+sudo docker run -d --name tapak --restart unless-stopped -p 5000:5000 --env-file .env -v /var/log/toko:/srv/logs tapak-store
 sudo docker logs toko
 ```
 Ubah `VULN_*` di `.env`, lalu `docker rm -f toko` dan `docker run` lagi (tanpa build ulang).
