@@ -248,3 +248,9 @@ def test_ilustrasi_svg_dan_log_search_tidak_berisik():
     a.post("/panel/products/new", data=dict(name="Berfoto", brand="Bayu", category="lari", price="1000", stock="1",
                                             image=(io.BytesIO(PNG), "f.png")), content_type="multipart/form-data")
     assert '<img class="photo"' in html(c.get("/products?q=Berfoto"))
+
+
+def test_pilihan_ukuran_berupa_tombol_36_sampai_46():
+    r = html(T().web().get("/products/1"))
+    assert r.count('type="radio" name="size"') == 11
+    assert 'value="36"' in r and 'value="46"' in r and 'value="47"' not in r
