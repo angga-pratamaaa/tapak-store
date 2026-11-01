@@ -234,3 +234,17 @@ def test_halaman_galat():
     r = t.new_client().get("/tidak-ada")
     assert r.status_code == 404 and "<html" in html(r)
     assert t.call("/api/tidak-ada")[0] == 404
+
+
+def test_ilustrasi_svg_dan_log_search_tidak_berisik():
+    t = T()
+    c = t.web()
+    page = html(c.get("/products"))
+    assert page.count("<svg") >= 12 and 'class="ph' not in page   # tiap kartu: ilustrasi SVG bila belum ada foto
+    assert not any("event=SEARCH" in l for l in t.logs)           # membuka katalog tanpa pencarian tidak dicatat
+    c.get("/products?q=rimba")
+    assert any("event=SEARCH q=rimba" in l for l in t.logs)
+    a = t.web("admin", "Admin#2026")
+    a.post("/panel/products/new", data=dict(name="Berfoto", brand="Bayu", category="lari", price="1000", stock="1",
+                                            image=(io.BytesIO(PNG), "f.png")), content_type="multipart/form-data")
+    assert '<img class="photo"' in html(c.get("/products?q=Berfoto"))

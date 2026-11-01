@@ -224,5 +224,7 @@ td.actions form, td.actions a { display: inline-block; margin: 0 .25rem 0 0; }
 .s-pending { background: #eee; } .s-waiting { background: #fff3cd; } .s-paid { background: #d9f2e4; color: var(--ok); } .s-rejected { background: #fde2e0; color: var(--err); }
 .auth-forms { max-width: 420px; margin: 2rem auto; }
 .cats a { padding: .4rem .7rem; font-weight: 600; font-size: .9rem; white-space: nowrap; } .cats a:hover { color: var(--hot); }
-.card .media .ph, .card .media .photo { position: absolute; inset: 0; }
-.m-media { position: relative; min-height: 320px; } .m-media .ph, .m-media .photo { position: absolute; inset: 0; }
+.card .media .photo { position: absolute; inset: 0; }
+.m-media { position: relative; min-height: 280px; display: grid; place-items: center; background: radial-gradient(circle at 50% 62%, var(--tint, #0001) 0, transparent 62%), #fff; border: 1px solid var(--line); }
+.m-media svg { width: 90%; } .m-media .photo { position: absolute; inset: 0; }
+.thumb-cell svg { width: 64px; height: auto; }

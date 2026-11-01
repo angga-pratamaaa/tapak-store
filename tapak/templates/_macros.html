@@ -10,12 +10,12 @@
 
 {% macro thumb(p) %}
 {% if p.image %}<img class="photo" src="{{ url_for('shop.product_image', name=p.image) }}" alt="{{ p.name }}" loading="lazy">
-{% else %}<div class="ph cat-{{ p.category }}"><span>{{ p.brand[:1] or 'T' }}</span><small>{{ p.category }}</small></div>{% endif %}
+{% else %}{{ shoe_svg(p) }}{% endif %}
 {% endmacro %}
 
 {% macro card(p) %}
 <a class="card" href="{{ url_for('shop.product', pid=p.id) }}">
-  <div class="media">{{ thumb(p) }}<span class="tag{% if p.stock < 10 %} hot{% endif %}">{{ p.category }}{% if p.stock < 10 %} · stok {{ p.stock }}{% endif %}</span></div>
+  <div class="media" style="--tint:{{ p|tint }}">{{ thumb(p) }}<span class="tag{% if p.stock < 10 %} hot{% endif %}">{{ p.category }}{% if p.stock < 10 %} · stok {{ p.stock }}{% endif %}</span></div>
   <div class="info">
     <h3>{{ p.name }}</h3>
     <div class="sub">{{ p.brand }}</div>

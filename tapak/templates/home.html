@@ -11,9 +11,10 @@
       <a class="btn line" href="{{ url_for('shop.catalog', category='lari') }}">Sepatu lari</a>
     </div>
   </div>
+  <div class="hero-art" aria-hidden="true">{{ shoe_svg(hero) }}</div>
 </section>
 <section class="tiles" aria-label="Belanja per kategori">
-  {% for c in categories %}<a class="tile" href="{{ url_for('shop.catalog', category=c) }}"><b>{{ c|capitalize }}</b><span>Lihat koleksi</span></a>{% endfor %}
+  {% for t in tiles %}<a class="tile" href="{{ url_for('shop.catalog', category=t.cat) }}" style="--tint:{{ t.first|tint }}"><b>{{ t.cat|capitalize }}</b><span>{{ t.n }} model</span>{{ shoe_svg(t.first) }}</a>{% endfor %}
 </section>
 <section class="shelf">
   <div class="shelf-head"><h2>Produk terbaru</h2><a class="btn sm" href="{{ url_for('shop.catalog') }}">Lihat semua</a></div>
