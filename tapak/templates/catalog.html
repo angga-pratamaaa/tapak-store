@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_macros.html" import card, pager %}
+{% block title %}Katalog — TAPAK{% endblock %}
+{% block content %}
+<h1 class="page-title">Katalog</h1>
+<form class="filters" method="get" action="{{ url_for('shop.catalog') }}" novalidate>
+  <label>Cari {{ form.q(class_="input") }}</label>
+  <label>Kategori {{ form.category(class_="input") }}</label>
+  <label>Harga min {{ form.min_price(class_="input") }}</label>
+  <label>Harga maks {{ form.max_price(class_="input") }}</label>
+  <button class="btn solid" type="submit">Terapkan</button>
+  <a class="btn" href="{{ url_for('shop.catalog') }}">Reset</a>
+</form>
+{% for field, errs in form.errors.items() %}{% for e in errs %}<div class="flash err">{{ e }}</div>{% endfor %}{% endfor %}
+<p class="muted">{{ page.total }} produk ditemukan</p>
+{% if page.items %}
+<div class="grid">{% for p in page.items %}{{ card(p) }}{% endfor %}</div>
+{{ pager(page, 'shop.catalog', args) }}
+{% else %}<p class="empty">Tidak ada produk yang cocok dengan filter.</p>{% endif %}
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% from "_macros.html" import card %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Koleksi musim ini</p>
+    <h1>Setiap langkah<br>punya tujuan.</h1>
+    <p class="lead">Sepatu lari, gunung, basket, futsal, skate, dan gaya hidup dari delapan merek pilihan.</p>
+    <div class="hero-cta">
+      <a class="btn solid" href="{{ url_for('shop.catalog') }}">Belanja sekarang</a>
+      <a class="btn line" href="{{ url_for('shop.catalog', category='lari') }}">Sepatu lari</a>
+    </div>
+  </div>
+</section>
+<section class="tiles" aria-label="Belanja per kategori">
+  {% for c in categories %}<a class="tile" href="{{ url_for('shop.catalog', category=c) }}"><b>{{ c|capitalize }}</b><span>Lihat koleksi</span></a>{% endfor %}
+</section>
+<section class="shelf">
+  <div class="shelf-head"><h2>Produk terbaru</h2><a class="btn sm" href="{{ url_for('shop.catalog') }}">Lihat semua</a></div>
+  <div class="grid">{% for p in featured %}{{ card(p) }}{% endfor %}</div>
+</section>
+{% endblock %}

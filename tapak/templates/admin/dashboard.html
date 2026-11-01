@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Dashboard admin — TAPAK{% endblock %}
+{% block content %}
+<h1 class="page-title">Dashboard admin</h1>{% include "admin/_nav.html" %}
+<div class="stats">
+  <div class="stat"><span>Pengguna</span><div class="num">{{ stats.users }}</div></div>
+  <div class="stat"><span>Produk</span><div class="num">{{ stats.products }}</div></div>
+  <div class="stat"><span>Pesanan</span><div class="num">{{ stats.orders }}</div></div>
+  <div class="stat"><span>Menunggu verifikasi</span><div class="num">{{ stats.waiting }}</div></div>
+  <div class="stat"><span>Stok menipis (&lt;10)</span><div class="num">{{ stats.low_stock }}</div></div>
+  <div class="stat"><span>Pendapatan (lunas)</span><div class="num">{{ stats.revenue|rupiah }}</div></div>
+</div>
+<h3 class="sub-title">Pesanan terbaru</h3>
+<div class="tablewrap"><table>
+  <tr><th>No.</th><th>Pengguna</th><th>Total</th><th>Status</th></tr>
+  {% for o in recent %}<tr><td>#{{ o.id }}</td><td>{{ o.user.username }}</td><td>{{ o.total|rupiah }}</td><td><span class="pill s-{{ o.status }}">{{ labels.get(o.status, o.status) }}</span></td></tr>
+  {% else %}<tr><td colspan="4" class="muted">Belum ada pesanan.</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

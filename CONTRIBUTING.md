@@ -5,7 +5,7 @@ Repositori ini **private**. Aplikasi sengaja rentan untuk lab SOC, jadi jangan d
 ## Aturan
 1. Jangan push langsung ke `main` (kecuali ketua).
 2. Satu perubahan = satu cabang = satu pull request. Nama cabang: `nama/topik`, contoh `louisa/isi-produk`.
-3. Louisa dan Fauziah hanya mengubah: `public/index.html` (teks), `public/style.css` (tampilan), dan berkas laporan uji. Jangan mengubah `app.py`, `db.py`, `logger.py`, atau `Dockerfile`.
+3. Louisa dan Fauziah hanya mengubah: `tapak/templates/` (teks), `tapak/static/style.css` (tampilan), dan berkas laporan uji. Jangan mengubah `tapak/*.py`, `tapak/blueprints/`, `migrations/`, atau `Dockerfile`.
 4. Jangan pernah mengunggah `.env`, kata sandi, atau token.
 5. Ketua meninjau dan menggabungkan semua pull request.
 

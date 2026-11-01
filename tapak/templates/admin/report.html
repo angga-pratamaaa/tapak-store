@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Laporan penjualan — Panel admin{% endblock %}
+{% block content %}
+<h1 class="page-title">Laporan penjualan</h1>{% include "admin/_nav.html" %}
+<form method="get" class="filters" data-validate>
+  <label>{{ form.date_from.label.text }} {{ form.date_from(class_="input") }}</label>
+  <label>{{ form.date_to.label.text }} {{ form.date_to(class_="input") }}</label>
+  <button class="btn solid" type="submit">Tampilkan</button>
+  <a class="btn" href="{{ url_for('panel.reports') }}">Reset</a>
+</form>
+{% for field, errs in form.errors.items() %}{% for e in errs %}<div class="flash err">{{ e }}</div>{% endfor %}{% endfor %}
+<p class="muted">Hanya pesanan berstatus Lunas. Total: <b>{{ n_orders }}</b> pesanan, <b>{{ revenue|rupiah }}</b>.</p>
+<p><a class="btn sm" href="{{ url_for('panel.reports_export', format='csv', **qs) }}">Ekspor CSV</a>
+   <a class="btn sm" href="{{ url_for('panel.reports_export', format='xlsx', **qs) }}">Ekspor Excel</a></p>
+<h3 class="sub-title">Per hari</h3>
+<div class="tablewrap"><table><tr><th>Tanggal</th><th>Pesanan</th><th>Pendapatan</th></tr>
+  {% for d in daily %}<tr><td>{{ d.day }}</td><td>{{ d.orders }}</td><td>{{ d.revenue|rupiah }}</td></tr>{% else %}<tr><td colspan="3" class="muted">Tidak ada data pada rentang ini.</td></tr>{% endfor %}</table></div>
+<h3 class="sub-title">Produk terlaris</h3>
+<div class="tablewrap"><table><tr><th>Produk</th><th>Terjual</th><th>Pendapatan</th></tr>
+  {% for t in top %}<tr><td>{{ t.name }}</td><td>{{ t.qty }}</td><td>{{ t.revenue|rupiah }}</td></tr>{% else %}<tr><td colspan="3" class="muted">Tidak ada data.</td></tr>{% endfor %}</table></div>
+{% endblock %}

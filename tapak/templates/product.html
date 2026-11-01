@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% from "_macros.html" import thumb, field, csrf %}
+{% block title %}{{ p.name }} — TAPAK{% endblock %}
+{% block content %}
+<div class="detail">
+  <div class="m-media">{{ thumb(p) }}</div>
+  <div class="m-body">
+    <span class="muted">{{ p.category|capitalize }}</span>
+    <h1>{{ p.name }}</h1>
+    <div class="sub">{{ p.brand }}</div>
+    <div class="m-price">{{ p.price|rupiah }}</div>
+    <p>{{ p.description or 'Belum ada deskripsi.' }}</p>
+    <p class="muted">Stok: {{ p.stock }}</p>
+    {% if p.stock > 0 %}
+    <form method="post" action="{{ url_for('shop.cart_add') }}" class="form-grid">
+      {{ csrf() }}<input type="hidden" name="product_id" value="{{ p.id }}">
+      {{ field(cart_form.size) }}{{ field(cart_form.qty) }}
+      <button class="btn solid" type="submit">Tambah ke keranjang</button>
+    </form>
+    {% else %}<p class="flash err">Stok habis.</p>{% endif %}
+  </div>
+</div>
+<section class="m-reviews">
+  <h3>Ulasan ({{ reviews|length }})</h3>
+  {% for r in reviews %}
+  <div class="review"><b>{{ r.user.username }}</b> · {{ r.rating }}/5
+    {# Komentar disimpan ter-escape saat VULN_XSS=0; |safe meniru perilaku tampilan lama (RENTAN saat VULN_XSS=1). #}
+    <p>{{ r.comment|safe }}</p></div>
+  {% else %}<p class="muted">Belum ada ulasan.</p>{% endfor %}
+  {% if me %}
+  <form method="post" action="{{ url_for('shop.add_review', pid=p.id) }}" class="stack">
+    {{ csrf() }}{{ field(review_form.rating) }}{{ field(review_form.comment) }}
+    <button class="btn solid" type="submit">Kirim ulasan</button>
+  </form>
+  {% else %}<p class="muted"><a href="{{ url_for('auth.login', next=request.path) }}">Masuk</a> untuk menulis ulasan.</p>{% endif %}
+</section>
+{% endblock %}

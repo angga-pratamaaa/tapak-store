@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Pesanan saya — TAPAK{% endblock %}
+{% block content %}
+{% set labels = {'pending':'Belum bayar','waiting':'Menunggu verifikasi','paid':'Lunas','rejected':'Ditolak'} %}
+<h1 class="page-title">Pesanan saya</h1>
+{% if orders %}
+<div class="tablewrap"><table>
+  <tr><th>No.</th><th>Tanggal</th><th>Total</th><th>Status</th><th></th></tr>
+  {% for o in orders %}<tr><td>#{{ o.id }}</td><td>{{ o.created_at.strftime('%d-%m-%Y %H:%M') if o.created_at else '-' }}</td><td>{{ o.total|rupiah }}</td>
+    <td><span class="pill s-{{ o.status }}">{{ labels.get(o.status, o.status) }}</span></td><td><a class="btn sm" href="{{ url_for('shop.order_detail', oid=o.id) }}">Detail</a></td></tr>{% endfor %}
+</table></div>
+{% else %}<p class="empty">Belum ada pesanan.</p>{% endif %}
+{% endblock %}
