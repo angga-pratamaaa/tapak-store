@@ -1,11 +1,13 @@
 """Halaman web pelanggan: beranda, katalog + filter harga, detail, keranjang, pesanan, bukti bayar."""
 import os
+from types import SimpleNamespace
 
 from flask import (Blueprint, abort, current_app, flash, redirect, render_template, request, send_from_directory,
                    session, url_for)
 from sqlalchemy import or_
 
 from tapak.blueprints.api import store_review
+from tapak.config import CATEGORIES
 from tapak.blueprints.auth import login_required
 from tapak.errors import ApiError
 from tapak.extensions import db
@@ -22,7 +24,13 @@ bp = Blueprint("shop", __name__)
 @bp.get("/")
 def home():
     featured = db.session.scalars(db.select(Product).order_by(Product.created_at.desc(), Product.id.desc()).limit(8)).all()
-    return render_template("home.html", featured=featured)
+    tiles = []
+    for c in CATEGORIES:
+        items = db.session.scalars(db.select(Product).where(Product.category == c).order_by(Product.id)).all()
+        if items:
+            tiles.append(dict(cat=c, n=len(items), first=items[0]))
+    hero = SimpleNamespace(id=3, brand="Langkah", category="basket", name="Koleksi TAPAK")
+    return render_template("home.html", featured=featured, tiles=tiles, hero=hero)
 
 
 @bp.get("/products")
@@ -40,7 +48,8 @@ def catalog():
             q = q.where(Product.price >= form.min_price.data)
         if form.max_price.data is not None:
             q = q.where(Product.price <= form.max_price.data)
-        L("INFO", "SEARCH", q=term, ip=client_ip())
+        if term or form.category.data or form.min_price.data is not None or form.max_price.data is not None:
+            L("INFO", "SEARCH", q=term, ip=client_ip())
     else:
         q = q.where(db.false())
     page = db.paginate(q.order_by(Product.id), page=request.args.get("page", 1, type=int), per_page=current_app.config["PER_PAGE"], error_out=False)

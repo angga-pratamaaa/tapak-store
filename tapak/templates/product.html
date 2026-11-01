@@ -3,7 +3,7 @@
 {% block title %}{{ p.name }} — TAPAK{% endblock %}
 {% block content %}
 <div class="detail">
-  <div class="m-media">{{ thumb(p) }}</div>
+  <div class="m-media" style="--tint:{{ p|tint }}">{{ thumb(p) }}</div>
   <div class="m-body">
     <span class="muted">{{ p.category|capitalize }}</span>
     <h1>{{ p.name }}</h1>

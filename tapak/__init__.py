@@ -8,6 +8,7 @@ from werkzeug.exceptions import HTTPException
 
 from tapak.config import CATEGORIES, MIGRATIONS_DIR, load_config
 from tapak.errors import ApiError
+from tapak.illustration import shoe_svg, tint
 from tapak.extensions import csrf, db, migrate
 from tapak.logs import L, client_ip, make_logger
 from tapak.util import rupiah
@@ -33,6 +34,8 @@ def create_app(overrides=None):
         app.register_blueprint(m.bp)
 
     app.jinja_env.filters["rupiah"] = rupiah
+    app.jinja_env.filters["tint"] = tint
+    app.jinja_env.globals["shoe_svg"] = shoe_svg
 
     @app.context_processor
     def inject():
