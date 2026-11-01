@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf, thumb %}
+{% block title %}Produk — Panel admin{% endblock %}
+{% block content %}
+<h1 class="page-title">Kelola produk</h1>{% include "admin/_nav.html" %}
+<p><a class="btn solid" href="{{ url_for('panel.product_new') }}">+ Produk baru</a></p>
+<div class="tablewrap"><table>
+  <tr><th>Foto</th><th>Nama</th><th>Merek</th><th>Kategori</th><th>Harga</th><th>Stok</th><th></th></tr>
+  {% for p in products %}
+  <tr><td class="thumb-cell">{{ thumb(p) }}</td><td>{{ p.name }}</td><td>{{ p.brand }}</td><td>{{ p.category }}</td><td>{{ p.price|rupiah }}</td><td>{{ p.stock }}</td>
+    <td class="actions"><a class="btn sm" href="{{ url_for('panel.product_edit', pid=p.id) }}">Ubah</a>
+      <form method="post" action="{{ url_for('panel.product_delete', pid=p.id) }}" data-confirm="Hapus produk {{ p.name }}?">{{ csrf() }}<button class="btn sm danger" type="submit">Hapus</button></form></td></tr>
+  {% endfor %}
+</table></div>
+{% endblock %}

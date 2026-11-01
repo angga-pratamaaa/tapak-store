@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field, csrf %}
+{% block title %}Pesanan #{{ o.id }} — TAPAK{% endblock %}
+{% block content %}
+{% set labels = {'pending':'Belum bayar','waiting':'Menunggu verifikasi','paid':'Lunas','rejected':'Ditolak'} %}
+<h1 class="page-title">Pesanan #{{ o.id }}</h1>
+<p>Status: <span class="pill s-{{ o.status }}">{{ labels.get(o.status, o.status) }}</span> · Total <b>{{ o.total|rupiah }}</b></p>
+<div class="tablewrap"><table>
+  <tr><th>Produk</th><th>Ukuran</th><th>Jumlah</th><th>Harga satuan</th></tr>
+  {% for i in o.items %}<tr><td>{{ i.product.name if i.product else '(produk dihapus)' }}</td><td>{{ i.size }}</td><td>{{ i.qty }}</td><td>{{ i.unit_price|rupiah }}</td></tr>{% endfor %}
+</table></div>
+{% if o.payment_proof %}<p><a class="btn" href="{{ url_for('shop.proof_file', oid=o.id) }}" target="_blank" rel="noopener">Lihat bukti pembayaran</a></p>{% endif %}
+{% if o.status in ('pending', 'rejected') %}
+<section class="panel">
+  <h3>{{ 'Unggah ulang bukti pembayaran' if o.status == 'rejected' else 'Unggah bukti pembayaran' }}</h3>
+  <p class="muted">Transfer ke rekening toko (simulasi lab), lalu unggah foto bukti transfer.</p>
+  <form method="post" action="{{ url_for('shop.upload_proof', oid=o.id) }}" enctype="multipart/form-data" class="stack">
+    {{ csrf() }}{{ field(form.proof) }}<button class="btn solid" type="submit">Kirim bukti</button>
+  </form>
+</section>
+{% endif %}
+{% endblock %}

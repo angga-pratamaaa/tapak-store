@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf %}
+{% block title %}Pengguna — Panel admin{% endblock %}
+{% block content %}
+<h1 class="page-title">Kelola pengguna</h1>{% include "admin/_nav.html" %}
+<div class="tablewrap"><table>
+  <tr><th>ID</th><th>Username</th><th>Email</th><th>Peran</th><th>Status</th><th></th></tr>
+  {% for u in users %}
+  <tr><td>{{ u.id }}</td><td>{{ u.username }}</td><td>{{ u.email or '-' }}</td><td>{{ u.role }}</td>
+    <td><span class="pill {{ 's-paid' if u.is_active else 's-rejected' }}">{{ 'Aktif' if u.is_active else 'Nonaktif' }}</span></td>
+    <td class="actions">
+      <form method="post" action="{{ url_for('panel.user_toggle', uid=u.id) }}">{{ csrf() }}<button class="btn sm" type="submit">{{ 'Nonaktifkan' if u.is_active else 'Aktifkan' }}</button></form>
+      <form method="post" action="{{ url_for('panel.user_delete', uid=u.id) }}" data-confirm="Hapus akun {{ u.username }}?">{{ csrf() }}<button class="btn sm danger" type="submit">Hapus</button></form>
+    </td></tr>
+  {% endfor %}
+</table></div>
+{% endblock %}

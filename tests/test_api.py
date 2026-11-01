@@ -1,37 +1,7 @@
 import json
 import re
 
-import pytest
-
-from app import create_app, seed
-from db import open_db
-
-OFF = dict(VULN_SQLI=False, VULN_IDOR=False, VULN_XSS=False, VULN_PRICE=False, VULN_ADMIN=False)
-
-
-class T:
-    def __init__(self, **vuln):
-        self.db = open_db("sqlite::memory:")
-        seed(self.db)
-        self.logs = []
-        self.client = create_app(self.db, vuln={**OFF, **vuln}, secret="tes", log=self.logs.append).test_client()
-
-    def call(self, path, method="GET", body=None, token=None, raw=None):
-        h = {"Authorization": f"Bearer {token}"} if token else {}
-        kw = {}
-        if raw is not None:
-            kw = dict(data=raw, content_type="application/json")
-        elif body is not None:
-            kw = dict(json=body)
-        r = self.client.open(path, method=method, headers=h, **kw)
-        return r.status_code, r.get_json(silent=True)
-
-    def login(self, u, p):
-        return (self.call("/api/login", "POST", {"username": u, "password": p})[1] or {}).get("token")
-
-    @property
-    def log_text(self):
-        return "\n".join(self.logs)
+from helpers import T
 
 
 def test_health_dan_produk():

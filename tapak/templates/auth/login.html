@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field, csrf %}
+{% block title %}Masuk — TAPAK{% endblock %}
+{% block content %}
+<section class="auth-forms panel">
+  <h2>Masuk</h2>
+  <form method="post" class="stack" data-validate>
+    {{ csrf() }}{{ field(form.username) }}{{ field(form.password) }}
+    <button class="btn solid wide" type="submit">Masuk</button>
+  </form>
+  <p class="muted">Belum punya akun? <a href="{{ url_for('auth.register') }}">Daftar</a></p>
+</section>
+{% endblock %}

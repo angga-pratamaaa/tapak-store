@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}{{ code }} — TAPAK{% endblock %}
+{% block content %}
+<section class="panel denied"><h1>{{ code }}</h1><h3>{{ name }}</h3><p>{{ desc }}</p><a class="btn solid" href="{{ url_for('shop.home') }}">Ke beranda</a></section>
+{% endblock %}

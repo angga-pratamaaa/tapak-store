@@ -5,3 +5,5 @@ dev.db
 logs
 tests
 .pytest_cache
+uploads
+migrations/__pycache__

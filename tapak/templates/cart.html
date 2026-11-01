@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf %}
+{% block title %}Keranjang — TAPAK{% endblock %}
+{% block content %}
+<h1 class="page-title">Keranjang</h1>
+{% if items %}
+<div class="tablewrap"><table>
+  <tr><th>Produk</th><th>Ukuran</th><th>Jumlah</th><th>Subtotal</th><th></th></tr>
+  {% for i in items %}
+  <tr><td><a href="{{ url_for('shop.product', pid=i.p.id) }}">{{ i.p.name }}</a></td><td>{{ i.size }}</td><td>{{ i.qty }}</td><td>{{ i.sub|rupiah }}</td>
+    <td><form method="post" action="{{ url_for('shop.cart_remove', idx=i.idx) }}">{{ csrf() }}<button class="btn sm danger" type="submit">Hapus</button></form></td></tr>
+  {% endfor %}
+</table></div>
+<p class="cart-total">Total: <b>{{ total|rupiah }}</b></p>
+<form method="post" action="{{ url_for('shop.checkout') }}">{{ csrf() }}<button class="btn solid" type="submit">Buat pesanan</button></form>
+{% else %}<p class="empty">Keranjang kosong. <a href="{{ url_for('shop.catalog') }}">Mulai belanja</a>.</p>{% endif %}
+{% endblock %}

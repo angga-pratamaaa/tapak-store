@@ -1,0 +1,35 @@
+{% macro field(f) %}
+<div class="field{% if f.errors %} has-err{% endif %}">
+  <label for="{{ f.id }}">{{ f.label.text }}</label>
+  {{ f(class_="input", required=f.flags.required) }}
+  {% for e in f.errors %}<small class="err">{{ e }}</small>{% endfor %}
+</div>
+{% endmacro %}
+
+{% macro csrf() %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% endmacro %}
+
+{% macro thumb(p) %}
+{% if p.image %}<img class="photo" src="{{ url_for('shop.product_image', name=p.image) }}" alt="{{ p.name }}" loading="lazy">
+{% else %}<div class="ph cat-{{ p.category }}"><span>{{ p.brand[:1] or 'T' }}</span><small>{{ p.category }}</small></div>{% endif %}
+{% endmacro %}
+
+{% macro card(p) %}
+<a class="card" href="{{ url_for('shop.product', pid=p.id) }}">
+  <div class="media">{{ thumb(p) }}<span class="tag{% if p.stock < 10 %} hot{% endif %}">{{ p.category }}{% if p.stock < 10 %} · stok {{ p.stock }}{% endif %}</span></div>
+  <div class="info">
+    <h3>{{ p.name }}</h3>
+    <div class="sub">{{ p.brand }}</div>
+    <div class="price">{{ p.price|rupiah }}</div>
+  </div>
+</a>
+{% endmacro %}
+
+{% macro pager(page, endpoint, args) %}
+{% if page.pages > 1 %}
+<nav class="pager" aria-label="Halaman">
+  {% if page.has_prev %}<a class="btn sm" href="{{ url_for(endpoint, page=page.prev_num, **args) }}">‹ Sebelumnya</a>{% endif %}
+  <span class="muted">Halaman {{ page.page }} dari {{ page.pages }}</span>
+  {% if page.has_next %}<a class="btn sm" href="{{ url_for(endpoint, page=page.next_num, **args) }}">Berikutnya ›</a>{% endif %}
+</nav>
+{% endif %}
+{% endmacro %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf %}
+{% block title %}Pesanan — Panel admin{% endblock %}
+{% block content %}
+<h1 class="page-title">Pesanan & verifikasi pembayaran</h1>{% include "admin/_nav.html" %}
+<form method="get" class="filters"><label>Status
+  <select name="status" class="input" onchange="this.form.submit()"><option value="">Semua</option>
+  {% for k, v in labels.items() %}<option value="{{ k }}" {{ 'selected' if k == status }}>{{ v }}</option>{% endfor %}</select></label></form>
+<div class="tablewrap"><table>
+  <tr><th>No.</th><th>Pengguna</th><th>Tanggal</th><th>Total</th><th>Status</th><th>Bukti</th><th></th></tr>
+  {% for o in orders %}
+  <tr><td>#{{ o.id }}</td><td>{{ o.user.username }}</td><td>{{ o.created_at.strftime('%d-%m-%Y %H:%M') if o.created_at else '-' }}</td><td>{{ o.total|rupiah }}</td>
+    <td><span class="pill s-{{ o.status }}">{{ labels.get(o.status, o.status) }}</span></td>
+    <td>{% if o.payment_proof %}<a href="{{ url_for('shop.proof_file', oid=o.id) }}" target="_blank" rel="noopener">Lihat</a>{% else %}-{% endif %}</td>
+    <td class="actions">{% if o.status == 'waiting' %}
+      <form method="post" action="{{ url_for('panel.order_decide', oid=o.id, action='approve') }}">{{ csrf() }}<button class="btn sm solid" type="submit">Setujui</button></form>
+      <form method="post" action="{{ url_for('panel.order_decide', oid=o.id, action='reject') }}">{{ csrf() }}<button class="btn sm danger" type="submit">Tolak</button></form>{% endif %}</td></tr>
+  {% else %}<tr><td colspan="7" class="muted">Tidak ada pesanan.</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

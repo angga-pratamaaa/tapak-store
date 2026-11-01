@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field, csrf, thumb %}
+{% block title %}{{ 'Ubah' if p else 'Tambah' }} produk — Panel admin{% endblock %}
+{% block content %}
+<h1 class="page-title">{{ 'Ubah produk' if p else 'Produk baru' }}</h1>{% include "admin/_nav.html" %}
+<form method="post" enctype="multipart/form-data" class="panel stack" data-validate>
+  {{ csrf() }}{{ field(form.name) }}{{ field(form.brand) }}{{ field(form.category) }}{{ field(form.price) }}{{ field(form.stock) }}{{ field(form.description) }}
+  {% if p and p.image %}<div class="thumb-cell">{{ thumb(p) }}</div>{% endif %}
+  {{ field(form.image) }}
+  <div class="actions"><button class="btn solid" type="submit">Simpan</button><a class="btn" href="{{ url_for('panel.products') }}">Batal</a></div>
+</form>
+{% endblock %}
