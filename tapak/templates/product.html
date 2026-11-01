@@ -12,10 +12,14 @@
     <p>{{ p.description or 'Belum ada deskripsi.' }}</p>
     <p class="muted">Stok: {{ p.stock }}</p>
     {% if p.stock > 0 %}
-    <form method="post" action="{{ url_for('shop.cart_add') }}" class="form-grid">
+    <form method="post" action="{{ url_for('shop.cart_add') }}" class="stack">
       {{ csrf() }}<input type="hidden" name="product_id" value="{{ p.id }}">
-      {{ field(cart_form.size) }}{{ field(cart_form.qty) }}
-      <button class="btn solid" type="submit">Tambah ke keranjang</button>
+      <div class="m-label" id="size-label">Pilih ukuran</div>
+      <div class="size-grid" role="radiogroup" aria-labelledby="size-label">
+        {% for s in range(36, 47) %}<label class="size-opt"><input type="radio" name="size" value="{{ s }}" required><span>{{ s }}</span></label>{% endfor %}
+      </div>
+      <input type="hidden" name="qty" value="1">
+      <button class="btn solid wide" type="submit">Tambah ke keranjang</button>
     </form>
     {% else %}<p class="flash err">Stok habis.</p>{% endif %}
   </div>
