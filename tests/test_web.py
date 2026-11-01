@@ -254,3 +254,15 @@ def test_pilihan_ukuran_berupa_tombol_36_sampai_46():
     r = html(T().web().get("/products/1"))
     assert r.count('type="radio" name="size"') == 11
     assert 'value="36"' in r and 'value="46"' in r and 'value="47"' not in r
+
+
+def test_laporan_pesanan_lama_tanpa_tanggal():
+    t = T()
+    with t.app.app_context():
+        # SQL langsung: lewat ORM, created_at=None justru diisi nilai bawaan
+        db.session.execute(db.text("INSERT INTO orders (user_id, total, status, created_at) VALUES (2, 5000, 'paid', NULL)"))
+        db.session.commit()
+    a = t.web("admin", "Admin#2026")
+    page = html(a.get("/panel/reports"))
+    assert "(tanpa tanggal)" in page and "None" not in page
+    assert "(tanpa tanggal),1,5000" in a.get("/panel/reports/export?format=csv").get_data(as_text=True)

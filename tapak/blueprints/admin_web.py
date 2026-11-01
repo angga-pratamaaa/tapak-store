@@ -196,7 +196,7 @@ def report_data(d_from, d_to):
     if d_to:
         cond.append(Order.created_at < datetime.combine(d_to + timedelta(days=1), time.min))
     day = func.date(Order.created_at)
-    daily = [dict(day=str(r[0]), orders=r[1], revenue=int(r[2] or 0))
+    daily = [dict(day=str(r[0]) if r[0] else "(tanpa tanggal)", orders=r[1], revenue=int(r[2] or 0))
              for r in db.session.execute(db.select(day, func.count(Order.id), func.sum(Order.total)).where(*cond).group_by(day).order_by(day))]
     top = [dict(name=r[0] or "(produk dihapus)", qty=int(r[1]), revenue=int(r[2]))
            for r in db.session.execute(

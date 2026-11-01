@@ -234,3 +234,16 @@ td.actions form, td.actions a { display: inline-block; margin: 0 .25rem 0 0; }
 .size-opt:hover span { border-color: var(--ink); }
 .size-opt input:checked + span { background: var(--ink); color: #fff; border-color: var(--ink); }
 .size-opt input:focus-visible + span { outline: 3px solid var(--hot); outline-offset: 2px; }
+
+/* ---- perbaikan keterbacaan status dan lebar header ---- */
+td .pill, .page > p .pill { margin-left: 0; }
+.s-pending { background: #e6e6e9; color: #3a3a40; }
+.s-waiting { background: #ffe9a8; color: #6b4e00; }
+.s-paid { background: #d9f2e4; color: var(--ok); }
+.s-rejected { background: #fde2e0; color: var(--err); }
+.top-in { gap: 16px; flex-wrap: wrap; }
+.search { width: 200px; }
+.cats { min-width: 0; gap: 0; }
+.cats a { padding: .4rem .45rem; font-size: .85rem; }
+.tool { padding-left: .5rem; padding-right: .5rem; }
+@media (max-width: 1280px) { .cats { order: 3; flex-basis: 100%; } .search { margin-left: auto; } }
